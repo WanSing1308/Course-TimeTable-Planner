@@ -8,12 +8,25 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div class="timetable">
+    <main>
+        <div id="timetable">
+        </div>
+        <div id="coursesList">
+            <div id="coruesContainer">
+            </div>
+        </div>
+    </main>
 
-    </div>
-    <div class="courseList">
+    <form id="courseInputs">
+        <label for="courseID">Course ID:</label>
+        <input type="text" id="courseID" name="courseID"><br>
+        <div id="daysSelect">
 
-    </div>
+        </div>
+        <br>
+        <input type="button" value="add" id="add-Btn">
+        <input type="button" value="reset" id="reset-Btn">
+    </form>
 </body>
-<script src="index.js"></script>
+<script type="module"src="index.js"></script>
 </html>

@@ -1,0 +1,30 @@
+#timetable{
+    border:1px black solid;
+    height:70vh;
+    width: 95%;
+    text-align: center;
+}
+#coursesList{
+    border:1px black solid;
+    height:70vh;
+    width: 20%;
+    margin: 0 auto;
+    text-align: center;
+}
+main{
+    display:flex;
+}
+#courseInputs{
+    border:1px solid black;
+    width: 20%;
+    margin:0 auto;
+    text-align: center;
+}
+#daysSelect{
+    display:inline-flex;
+    margin :0 auto;
+    padding:10px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
