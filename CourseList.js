@@ -23,7 +23,8 @@ export class CourseList{
         this.days = ["Mon","Tue","Wed","Thu","Fri"]
         this.node = $("coursesList")
         this.form = $("courseInputs")
-        this.timetable = $("timetable")
+        this.registeredCourse = []
+        this.dayObj = []
         this.courses = JSON.parse(localStorage.getItem("courses"))||[]
         this.setCheckBox()
         this.setTimeslots()
@@ -37,30 +38,49 @@ export class CourseList{
     }
     setTimeslots(){
         this.days.forEach(day=>{
-            this.timetable.appendChild(CE("div",day,day))
-            new Day(day)
+            $("timetable").appendChild(CE("div",day,day))
+            this.dayObj.push(new Day(day))
         })
     }
     init(){
         this.courses.forEach(courseObj=>{
             const course = new Course(courseObj,this)
             this.node.appendChild(course.node)
+            if (courseObj.registered)
+                this.registeredCourse.push(courseObj)
         })
+        for (let day of this.dayObj){
+            day.refresh(this.registeredCourse)
+        }
     }
-    regCourse(node,obj){
-        node.style.backgroundColor = "grey";
+    regCourse(node,courseObj){
+        this.registeredCourse.push(courseObj)
+        courseObj.registered = true
+        node.style.backgroundColor = "grey"
+        this.save()
+        for (let day of this.dayObj){
+            day.refresh(this.registeredCourse)
+        }
     }
-    dropCourse(node,obj){
+    dropCourse(node,courseObj){
+        this.registeredCourse.splice(this.registeredCourse.indexOf(courseObj,1))
+        courseObj.registered = false
         node.style.backgroundColor = "white"
+        this.save()
+        for (let day of this.dayObj){
+            day.refresh(this.registeredCourse)
+        }
     }
     addCourse(id,time){
-        const courseObj = {id,time}
+        const courseObj = {id,time,registered:false}
         const course = new Course(courseObj,this)
         this.courses.push(courseObj)
         this.node.appendChild(course.node)
         this.save();
     }
     deleteCourse(node,obj){
+        if (this.registeredCourse.indexOf(obj)!==-1)
+            this.dropCourse(node,obj)
         this.node.removeChild(node);
         this.courses.splice(this.courses.indexOf(obj),1)
         this.save();

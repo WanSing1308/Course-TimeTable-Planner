@@ -24,15 +24,22 @@ export class Course{
         this.obj = courseObj
         this.id = courseObj.id
         this.time = courseObj.time
+        this.registered = courseObj.registered
         this.createNode()
     }
     createNode(){
         this.node = CE("div","","","course")
-
+        
         const selectBtn = CE("input")
         selectBtn.type="checkbox"
         selectBtn.addEventListener("change",bind(selectBtnListener,this))
         this.node.appendChild(selectBtn)
+
+        if (this.registered){
+            this.node.style.backgroundColor = "grey"
+            selectBtn.checked = true
+        }
+            
         const idNode = CE("div",this.id)
         this.node.appendChild(idNode)
 
@@ -55,6 +62,8 @@ function selectBtnListener(event){
         this.container.regCourse(this.node,this.obj)
     else
         this.container.dropCourse(this.node,this.obj)
+    
+        
 }
 function deleteBtnListener(event){
     this.container.deleteCourse(this.node,this.obj)
