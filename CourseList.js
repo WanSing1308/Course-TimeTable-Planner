@@ -1,5 +1,5 @@
 import {Course} from "./Course.js"
-import {Timeslots} from "./Timeslots.js"
+import {Day} from "./Day.js"
 function $(id){
     return document.getElementById(id);
 }
@@ -8,10 +8,20 @@ function bind(func,that){
         func.call(that)
     })
 }
+function CE(tag,text="",id="",className=""){
+    const node =  document.createElement(tag)
+    if (text)
+        node.innerHTML = text
+    if (id)
+        node.id = id
+    if (className)
+        node.className = className
+    return node
+}
 export class CourseList{
     constructor(){
         this.days = ["Mon","Tue","Wed","Thu","Fri"]
-        this.node = $("coruesContainer")
+        this.node = $("coursesList")
         this.form = $("courseInputs")
         this.timetable = $("timetable")
         this.courses = JSON.parse(localStorage.getItem("courses"))||[]
@@ -27,7 +37,8 @@ export class CourseList{
     }
     setTimeslots(){
         this.days.forEach(day=>{
-            this.timetable.appendChild(new Timeslots(day))
+            this.timetable.appendChild(CE("div",day,day))
+            new Day(day)
         })
     }
     init(){
@@ -35,6 +46,12 @@ export class CourseList{
             const course = new Course(courseObj,this)
             this.node.appendChild(course.node)
         })
+    }
+    regCourse(node,obj){
+        node.style.backgroundColor = "grey";
+    }
+    dropCourse(node,obj){
+        node.style.backgroundColor = "white"
     }
     addCourse(id,time){
         const courseObj = {id,time}
@@ -54,27 +71,26 @@ export class CourseList{
     
     setCheckBox(){
         for (let day of this.days){
-            const dayNode = document.createElement("input")
+            const dayNode = CE("input")
             dayNode.type = "checkbox"
             dayNode.className = "courseDay"
             dayNode.name = "courseDay"
             dayNode.value = day
             dayNode.addEventListener("change",checkBoxListener)
 
-            const dayLabel = document.createElement("label")
-            dayLabel.innerHTML = day
+            const dayLabel = CE("label",day)
 
-            const start =document.createElement("input")
+            const start = CE("input")
             start.type = "time";
             start.disabled= true
             start.id = day+"start"
 
-            const end =document.createElement("input")
+            const end = CE("input")
             end.type = "time";
             end.disabled = true
             end.id = day+"end"
 
-            const dayCB = document.createElement("div")
+            const dayCB = CE("div")
             dayCB.appendChild(dayLabel)
             dayCB.appendChild(dayNode)
             dayCB.appendChild(start)
